@@ -8,7 +8,7 @@ import com.facebook.react.ReactRootView;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.react.common.LifecycleState;
-
+// PoCModuleActivity.java
 public class PoCModuleActivity extends ReactActivity {
 
     private ReactRootView mReactRootView;
@@ -18,22 +18,25 @@ public class PoCModuleActivity extends ReactActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        String bundleName = getIntent().getStringExtra("bundleName");
+        String moduleName = getIntent().getStringExtra("moduleName");
+        Bundle props = getIntent().getBundleExtra("props");
+
         mReactRootView = new ReactRootView(this);
 
         mReactInstanceManager = ReactInstanceManager.builder()
                 .setApplication(getApplication())
                 .setCurrentActivity(this)
-                .setBundleAssetName("red.bundle")
-                .setJSMainModulePath("index") // puedes omitir si solo usas bundle local
+                .setBundleAssetName(bundleName) // Ejemplo: red.bundle
+                .setJSMainModulePath("index")
                 .addPackage(new MainReactPackage())
+                .addPackage(new CustomPackage())
                 .setUseDeveloperSupport(false)
                 .setInitialLifecycleState(LifecycleState.RESUMED)
-                .setJavaScriptExecutorFactory(new HermesExecutorFactory()) // ✅ esta línea es clave
+                .setJavaScriptExecutorFactory(new HermesExecutorFactory())
                 .build();
 
-
-
-        mReactRootView.startReactApplication(mReactInstanceManager, "PoCModule", null);
+        mReactRootView.startReactApplication(mReactInstanceManager, moduleName, props);
         setContentView(mReactRootView);
     }
 }

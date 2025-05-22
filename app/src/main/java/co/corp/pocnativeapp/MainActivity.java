@@ -8,28 +8,35 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.widget.EditText;
+
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Crear el botón
+        EditText nameInput = new EditText(this);
+        nameInput.setHint("Ingresa tu nombre");
+
         Button openBundleBtn = new Button(this);
         openBundleBtn.setText("Abrir módulo React Native");
-        openBundleBtn.setTextSize(18);
-        openBundleBtn.setPadding(60, 30, 60, 30);
 
-        // Acción al hacer clic
         openBundleBtn.setOnClickListener(v -> {
+            String nombre = nameInput.getText().toString();
+            Bundle props = new Bundle();
+            props.putString("nombre", nombre); // ✅ ahora es un Bundle real
             Intent intent = new Intent(this, PoCModuleActivity.class);
+            intent.putExtra("bundleName", "app.bundle");
+            intent.putExtra("moduleName", "PoCModule");
+            intent.putExtra("props", props); // ✅ props como Bundle
             startActivity(intent);
         });
 
-        // Layout para centrar el botón
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setGravity(Gravity.CENTER);
         layout.setPadding(32, 32, 32, 32);
+        layout.addView(nameInput);
         layout.addView(openBundleBtn);
 
         setContentView(layout);
